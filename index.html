@@ -4,1003 +4,830 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to Build a Free AI Chatbot for Your Website</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Build a Free AI Chatbot — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0a0e1a;
-  --surface: #111827;
-  --card: #1a2235;
-  --border: rgba(255,255,255,0.07);
-  --accent: #7c3aed;
-  --accent2: #06b6d4;
-  --accent3: #10b981;
-  --warn: #f59e0b;
-  --text: #e2e8f0;
-  --muted: #64748b;
-  --code-bg: #0d1117;
+:root{
+  --bg:#07090f;--surface:#0d1117;--card:#111827;--border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);--accent:#6366f1;--accent2:#22d3ee;
+  --accent3:#10b981;--warn:#f59e0b;--danger:#ef4444;
+  --text:#e2e8f0;--muted:#64748b;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Sora',sans-serif;
-  font-size:15px;
-  line-height:1.7;
-  overflow-x:hidden;
-}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.75;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 15% 10%,rgba(99,102,241,0.07) 0%,transparent 55%),
+             radial-gradient(ellipse at 85% 90%,rgba(34,211,238,0.05) 0%,transparent 55%);
+  pointer-events:none;z-index:0;}
 
-/* ── BACKGROUND ── */
-body::before{
-  content:'';
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.06) 0%, transparent 60%);
-  pointer-events:none;z-index:0;
-}
+.wrap{max-width:900px;margin:0 auto;padding:48px 24px 120px;position:relative;z-index:1;}
 
-/* ── LAYOUT ── */
-.wrapper{
-  max-width:860px;margin:0 auto;
-  padding:40px 24px 120px;
-  position:relative;z-index:1;
-}
+/* HERO */
+.hero{text-align:center;padding:64px 0 56px;border-bottom:1px solid var(--border);margin-bottom:56px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:24px;}
+.hero h1{font-size:clamp(30px,5.5vw,52px);font-weight:900;line-height:1.1;margin-bottom:18px;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,#a5b4fc 40%,#22d3ee 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{font-size:17px;color:var(--muted);max-width:580px;margin:0 auto 32px;font-weight:300;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.pill{background:rgba(255,255,255,0.04);border:1px solid var(--border2);color:var(--muted);font-size:12px;padding:5px 14px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+.pill.g{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.25);color:#34d399;}
+.pill.b{background:rgba(34,211,238,0.08);border-color:rgba(34,211,238,0.25);color:#22d3ee;}
+.pill.p{background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.25);color:#818cf8;}
+.pill.y{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.25);color:#fbbf24;}
 
-/* ── HERO ── */
-.hero{
-  text-align:center;
-  padding:60px 0 50px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:50px;
-}
-.hero-badge{
-  display:inline-block;
-  background:rgba(124,58,237,0.15);
-  border:1px solid rgba(124,58,237,0.4);
-  color:#a78bfa;
-  font-family:'JetBrains Mono',monospace;
-  font-size:11px;letter-spacing:2px;
-  padding:4px 14px;border-radius:20px;
-  margin-bottom:20px;
-  text-transform:uppercase;
-}
-.hero h1{
-  font-size:clamp(28px,5vw,44px);
-  font-weight:800;line-height:1.15;
-  margin-bottom:16px;
-  background:linear-gradient(135deg,#fff 0%,#a78bfa 50%,#06b6d4 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.hero-sub{
-  font-size:16px;color:var(--muted);
-  max-width:560px;margin:0 auto 28px;
-}
-.hero-tags{
-  display:flex;flex-wrap:wrap;gap:8px;
-  justify-content:center;
-}
-.tag{
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--border);
-  color:var(--muted);font-size:12px;
-  padding:4px 12px;border-radius:6px;
-  font-family:'JetBrains Mono',monospace;
-}
-.tag.green{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#34d399;}
-.tag.blue{background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);color:#22d3ee;}
-.tag.purple{background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);color:#a78bfa;}
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:56px;}
+.toc-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:18px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;}
+@media(max-width:580px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{color:var(--muted);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);transition:color .2s;}
+.toc-grid a:hover{color:var(--text);}
+.toc-n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);min-width:22px;}
 
-/* ── TOC ── */
-.toc{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:24px 28px;
-  margin-bottom:48px;
-}
-.toc-title{
-  font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--muted);font-family:'JetBrains Mono',monospace;
-  margin-bottom:16px;
-}
-.toc-list{
-  list-style:none;
-  display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;
-}
-@media(max-width:600px){.toc-list{grid-template-columns:1fr;}}
-.toc-list a{
-  color:var(--muted);text-decoration:none;font-size:13px;
-  display:flex;align-items:center;gap:8px;
-  transition:color .2s;
-}
-.toc-list a:hover{color:var(--text);}
-.toc-num{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;color:var(--accent);
-  min-width:20px;
-}
+/* SECTION */
+.sec{margin-bottom:64px;}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.snum{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;color:#fff;}
+.sec-head h2{font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.3px;}
+h3{font-size:15px;font-weight:700;color:#fff;margin:28px 0 12px;}
+p{margin:10px 0;color:var(--text);}
 
-/* ── SECTIONS ── */
-.section{margin-bottom:56px;}
-.section-header{
-  display:flex;align-items:center;gap:14px;
-  margin-bottom:24px;
-  padding-bottom:14px;
-  border-bottom:1px solid var(--border);
-}
-.step-num{
-  width:36px;height:36px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'JetBrains Mono',monospace;font-weight:800;font-size:14px;
-  color:#fff;flex-shrink:0;
-}
-.section h2{
-  font-size:20px;font-weight:700;color:#fff;
-}
-.section h3{
-  font-size:15px;font-weight:700;color:#fff;
-  margin:24px 0 10px;
-}
+/* CALLOUTS */
+.box{border-radius:12px;padding:16px 20px;margin:20px 0;font-size:14px;display:flex;gap:14px;align-items:flex-start;}
+.box-ico{font-size:18px;flex-shrink:0;margin-top:2px;}
+.box.info{background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.18);}
+.box.success{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.18);}
+.box.warn{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.18);}
+.box.danger{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);}
+.box.tip{background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.18);}
 
-/* ── CALLOUTS ── */
-.callout{
-  border-radius:10px;padding:16px 18px;
-  margin:20px 0;font-size:14px;
-  display:flex;gap:12px;align-items:flex-start;
-}
-.callout-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.callout.info{background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);}
-.callout.success{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);}
-.callout.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);}
-.callout.tip{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);}
+/* CODE */
+.code{background:#0a0e1a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;margin:16px 0;overflow:hidden;}
+.code-bar{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}
+.code pre{padding:20px 22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:#cbd5e1;overflow-x:auto;white-space:pre-wrap;word-break:break-word;}
+.cm{color:#374151;}.ck{color:#a78bfa;}.cv{color:#34d399;}.cs{color:#fbbf24;}.cu{color:#22d3ee;}
 
-/* ── CODE BLOCKS ── */
-.code-block{
-  background:var(--code-bg);
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:10px;
-  margin:16px 0;
-  overflow:hidden;
-}
-.code-label{
-  background:rgba(255,255,255,0.04);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  padding:8px 16px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:11px;color:var(--muted);
-  letter-spacing:1px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.code-block pre{
-  padding:18px 20px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:13px;line-height:1.7;
-  color:#e2e8f0;
-  overflow-x:auto;
-  white-space:pre-wrap;word-break:break-word;
-}
-.code-block pre .comment{color:#4b5563;}
-.code-block pre .key{color:#a78bfa;}
-.code-block pre .val{color:#34d399;}
-.code-block pre .str{color:#fbbf24;}
-.code-block pre .url{color:#22d3ee;}
-
-/* ── STEPS LIST ── */
+/* STEPS */
 .steps{list-style:none;margin:16px 0;}
-.steps li{
-  display:flex;gap:14px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
-  font-size:14px;
-}
+.steps li{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);font-size:14px;}
 .steps li:last-child{border-bottom:none;}
-.steps .s-num{
-  width:24px;height:24px;border-radius:6px;
-  background:rgba(124,58,237,0.2);
-  color:#a78bfa;font-weight:800;font-size:12px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:1px;
-  font-family:'JetBrains Mono',monospace;
-}
-.steps .s-body strong{color:#fff;display:block;margin-bottom:2px;}
+.sn{width:26px;height:26px;border-radius:7px;flex-shrink:0;margin-top:1px;background:rgba(99,102,241,0.15);color:#818cf8;font-weight:800;font-size:12px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;}
+.steps strong{color:#fff;display:block;margin-bottom:3px;}
 
-/* ── PROVIDER TABLE ── */
-.provider-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;margin:16px 0;
-}
-.provider-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:10px;padding:16px;
-}
-.provider-card h4{
-  font-size:14px;font-weight:700;color:#fff;
-  margin-bottom:6px;display:flex;align-items:center;gap:8px;
-}
-.provider-card p{font-size:12px;color:var(--muted);margin-bottom:8px;}
-.provider-card .badge{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;padding:2px 8px;border-radius:4px;
-  background:rgba(16,185,129,0.15);color:#34d399;
-  border:1px solid rgba(16,185,129,0.3);
-}
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.card h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;}
+.card p{font-size:12px;color:var(--muted);margin:0 0 8px;}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:5px;}
+.badge.g{background:rgba(16,185,129,0.12);color:#34d399;border:1px solid rgba(16,185,129,0.25);}
+.badge.b{background:rgba(34,211,238,0.12);color:#22d3ee;border:1px solid rgba(34,211,238,0.25);}
+.badge.p{background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.25);}
 
-/* ── FILE STRUCTURE ── */
-.file-tree{
-  background:var(--code-bg);
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:10px;
-  padding:18px 20px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:13px;line-height:2;
-  color:#e2e8f0;
-  margin:16px 0;
-}
-.file-tree .dir{color:#a78bfa;}
-.file-tree .file{color:#34d399;}
-.file-tree .note{color:#4b5563;font-size:11px;}
+/* TABLE */
+.tbl{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:16px 0;}
+.trow{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid var(--border);font-size:13px;}
+.trow:last-child{border-bottom:none;}
+.tlabel{padding:12px 16px;background:rgba(255,255,255,0.02);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;display:flex;align-items:center;}
+.tval{padding:12px 16px;color:var(--text);display:flex;align-items:center;}
 
-/* ── SUMMARY TABLE ── */
-.summary{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  overflow:hidden;
-  margin:20px 0;
-}
-.summary-row{
-  display:grid;grid-template-columns:180px 1fr;
-  border-bottom:1px solid var(--border);
-  font-size:13px;
-}
-.summary-row:last-child{border-bottom:none;}
-.summary-row .label{
-  padding:12px 16px;
-  background:rgba(255,255,255,0.02);
-  color:var(--muted);font-weight:600;
-  font-family:'JetBrains Mono',monospace;font-size:12px;
-  display:flex;align-items:center;
-}
-.summary-row .value{
-  padding:12px 16px;color:var(--text);
-  display:flex;align-items:center;
-}
+/* FILE TREE */
+.tree{background:#0a0e1a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px 22px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2.1;margin:16px 0;}
+.tree .dir{color:#a78bfa;}.tree .file{color:#34d399;}.tree .note{color:#374151;font-size:11px;}
 
-/* ── FINAL BOX ── */
-.final-box{
-  background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(6,182,212,0.08));
-  border:1px solid rgba(124,58,237,0.3);
-  border-radius:14px;
-  padding:32px;
-  text-align:center;
-  margin-top:48px;
-}
-.final-box h2{font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;}
-.final-box p{color:var(--muted);font-size:14px;max-width:480px;margin:0 auto;}
+/* FINAL */
+.final{background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(34,211,238,0.06));border:1px solid rgba(99,102,241,0.25);border-radius:16px;padding:36px;text-align:center;margin-top:56px;}
+.final h2{font-size:26px;font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-0.5px;}
+.final p{color:var(--muted);font-size:15px;max-width:500px;margin:0 auto;}
 
-p{margin:10px 0;}
+a{color:var(--accent2);text-decoration:none;}a:hover{text-decoration:underline;}
 strong{color:#fff;}
-a{color:var(--accent2);text-decoration:none;}
-a:hover{text-decoration:underline;}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:5px;color:#a5b4fc;}
 </style>
 </head>
 <body>
-<div class="wrapper">
+<div class="wrap">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">Complete Guide</div>
-    <h1>Build a Free AI Chatbot<br>for Your Website</h1>
-    <p class="hero-sub">How to create a 24/7 AI support bot using free APIs, GitHub, and Hugging Face — no credit card, no monthly fees.</p>
-    <div class="hero-tags">
-      <span class="tag green">100% Free</span>
-      <span class="tag blue">No Credit Card</span>
-      <span class="tag purple">24/7 Online</span>
-      <span class="tag">Hugging Face</span>
-      <span class="tag">GitHub Pages</span>
-      <span class="tag">Groq API</span>
-    </div>
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">✦ Complete Guide</div>
+  <h1>Build a Free AI Chatbot<br>for Your Website</h1>
+  <p class="hero-desc">A complete step-by-step guide to creating a 24/7 AI support bot using only free services — no credit card, no monthly fees, no experience required.</p>
+  <div class="pills">
+    <span class="pill g">100% Free Forever</span>
+    <span class="pill b">No Credit Card</span>
+    <span class="pill p">24/7 Online</span>
+    <span class="pill y">Captcha Protection</span>
+    <span class="pill">Hugging Face</span>
+    <span class="pill">GitHub Pages</span>
+    <span class="pill">Groq AI</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-head">Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#s1"><span class="toc-n">01</span>What You Are Building</a>
+    <a href="#s2"><span class="toc-n">02</span>Create Free Accounts</a>
+    <a href="#s3"><span class="toc-n">03</span>Set Up Hugging Face Space</a>
+    <a href="#s4"><span class="toc-n">04</span>Write the Backend</a>
+    <a href="#s5"><span class="toc-n">05</span>Create Knowledge Files</a>
+    <a href="#s6"><span class="toc-n">06</span>Add Cloudflare Captcha</a>
+    <a href="#s7"><span class="toc-n">07</span>Add the Chat Widget</a>
+    <a href="#s8"><span class="toc-n">08</span>Test Everything</a>
+    <a href="#s9"><span class="toc-n">09</span>Add Basic Protection</a>
+    <a href="#s10"><span class="toc-n">10</span>Maintain and Grow</a>
+  </div>
+</div>
+
+<!-- 01 -->
+<div class="sec" id="s1">
+  <div class="sec-head"><div class="snum">01</div><h2>What You Are Building</h2></div>
+  <p>A <strong>custom AI chatbot</strong> that sits on your website, answers visitor questions 24/7, and uses your own knowledge files to give accurate topic-specific answers.</p>
+  <div class="tbl">
+    <div class="trow"><div class="tlabel">What it does</div><div class="tval">Answers questions about your topic 24/7 on your website</div></div>
+    <div class="trow"><div class="tlabel">Where it runs</div><div class="tval">Hugging Face Space — free cloud hosting for Python apps</div></div>
+    <div class="trow"><div class="tlabel">AI provider</div><div class="tval">Groq — free, extremely fast, no credit card needed</div></div>
+    <div class="trow"><div class="tlabel">Knowledge</div><div class="tval">Plain .txt files in a public GitHub repo you control</div></div>
+    <div class="trow"><div class="tlabel">Bot protection</div><div class="tval">Cloudflare Turnstile captcha — free, invisible to real users</div></div>
+    <div class="trow"><div class="tlabel">Website</div><div class="tval">Any HTML page — GitHub Pages, Netlify, your own domain</div></div>
+    <div class="trow"><div class="tlabel">Total cost</div><div class="tval">$0 — every service used has a free tier</div></div>
+  </div>
+  <div class="box info"><span class="box-ico">💡</span><div>This guide teaches you a <strong>production-ready architecture</strong> — multi-model fallback, knowledge loading from GitHub, captcha protection, and a floating chat widget. Start simple, add features as you grow.</div></div>
+</div>
+
+<!-- 02 -->
+<div class="sec" id="s2">
+  <div class="sec-head"><div class="snum">02</div><h2>Create Your Free Accounts</h2></div>
+  <p>You need four free accounts. None require a credit card.</p>
+  <div class="cards">
+    <div class="card"><h4>🤗 Hugging Face</h4><p>Hosts your Python AI backend 24/7 for free.</p><span class="badge g">hf.co — free</span></div>
+    <div class="card"><h4>⚡ Groq</h4><p>Free AI API. Fast Llama models. 14,400 requests/day free.</p><span class="badge b">console.groq.com</span></div>
+    <div class="card"><h4>🐙 GitHub</h4><p>Stores knowledge .txt files and optionally hosts your site.</p><span class="badge p">github.com — free</span></div>
+    <div class="card"><h4>☁️ Cloudflare</h4><p>Free Turnstile captcha to protect against bots.</p><span class="badge g">cloudflare.com — free</span></div>
   </div>
 
-  <!-- TOC -->
-  <div class="toc">
-    <div class="toc-title">Table of Contents</div>
-    <ul class="toc-list">
-      <li><a href="#overview"><span class="toc-num">01</span>Overview — What You Are Building</a></li>
-      <li><a href="#accounts"><span class="toc-num">02</span>Create Your Free Accounts</a></li>
-      <li><a href="#hfspace"><span class="toc-num">03</span>Set Up Hugging Face Space</a></li>
-      <li><a href="#backend"><span class="toc-num">04</span>Write the Backend (app.py)</a></li>
-      <li><a href="#knowledge"><span class="toc-num">05</span>Create Your Knowledge Files</a></li>
-      <li><a href="#widget"><span class="toc-num">06</span>Add the Chat Widget to Your Site</a></li>
-      <li><a href="#test"><span class="toc-num">07</span>Test Everything</a></li>
-      <li><a href="#maintain"><span class="toc-num">08</span>Maintain and Grow</a></li>
-    </ul>
-  </div>
+  <h3>Getting your API keys</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div><strong>Groq API Key</strong>Go to <code>console.groq.com</code> → sign in → API Keys in sidebar → Create API Key → copy the key (starts with gsk_)</div></li>
+    <li><span class="sn">2</span><div><strong>Hugging Face</strong>Go to <code>hf.co</code> → sign up → verify email. No extra key needed — HF uses a secrets system.</div></li>
+    <li><span class="sn">3</span><div><strong>GitHub</strong>Go to <code>github.com</code> → sign up → verify email. You'll create a knowledge repo in Step 5.</div></li>
+    <li><span class="sn">4</span><div><strong>Cloudflare</strong>Go to <code>dash.cloudflare.com</code> → sign up free. You'll set up Turnstile in Step 6.</div></li>
+  </ul>
 
-  <!-- SECTION 1 -->
-  <div class="section" id="overview">
-    <div class="section-header">
-      <div class="step-num">01</div>
-      <h2>Overview — What You Are Building</h2>
-    </div>
+  <div class="box warn"><span class="box-ico">⚠️</span><div>Use a <strong>personal Gmail account</strong> for all signups — not a school or work account. School accounts often block API access and cause quota errors.</div></div>
+</div>
 
-    <p>You are building a <strong>custom AI chatbot</strong> that lives on your website and answers questions about your topic. It uses your own knowledge files to give accurate answers instead of generic AI responses.</p>
+<!-- 03 -->
+<div class="sec" id="s3">
+  <div class="sec-head"><div class="snum">03</div><h2>Set Up Your Hugging Face Space</h2></div>
+  <p>A Hugging Face Space is free cloud hosting that runs your Python app 24/7. You don't need to manage servers.</p>
 
-    <div class="summary">
-      <div class="summary-row">
-        <div class="label">What it does</div>
-        <div class="value">Answers visitor questions 24/7 on your website</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Where AI runs</div>
-        <div class="value">Hugging Face Space (free hosting)</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">AI provider</div>
-        <div class="value">Groq — free, fast, no credit card needed</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Knowledge storage</div>
-        <div class="value">GitHub repo — plain .txt files you write</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Website</div>
-        <div class="value">Any HTML site — GitHub Pages, Netlify, etc.</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Total cost</div>
-        <div class="value">$0 — everything used is free tier</div>
-      </div>
-    </div>
+  <h3>Creating the Space</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div>Go to <code>huggingface.co/new-space</code> while logged in</div></li>
+    <li><span class="sn">2</span><div><strong>Fill the form:</strong> Space name: <code>yourname-assistant</code> / SDK: <strong>Docker</strong> / Visibility: <strong>Public</strong></div></li>
+    <li><span class="sn">3</span><div>Click <strong>Create Space</strong> — it'll be empty for now</div></li>
+    <li><span class="sn">4</span><div><strong>Add your Groq key as a secret:</strong> Settings → Variables and secrets → New secret → Name: <code>GROQ_API_KEY</code> → paste your key → Save</div></li>
+  </ul>
 
-    <div class="callout info">
-      <span class="callout-icon">💡</span>
-      <div>This guide follows exactly the same system built for MIA (Minecraft Items Accelerated) — a Discord community support bot serving 13 websites with 12 knowledge files and 10+ AI models in a fallback chain.</div>
-    </div>
-  </div>
-
-  <!-- SECTION 2 -->
-  <div class="section" id="accounts">
-    <div class="section-header">
-      <div class="step-num">02</div>
-      <h2>Create Your Free Accounts</h2>
-    </div>
-
-    <p>You need accounts on three platforms. All are completely free with no credit card required.</p>
-
-    <div class="provider-grid">
-      <div class="provider-card">
-        <h4>🤗 Hugging Face</h4>
-        <p>Hosts your backend AI server for free. This is where your bot actually runs.</p>
-        <span class="badge">hf.co — free</span>
-      </div>
-      <div class="provider-card">
-        <h4>⚡ Groq</h4>
-        <p>Free AI API. Provides fast responses using Llama and other models. 14,400 requests/day free.</p>
-        <span class="badge">console.groq.com — free</span>
-      </div>
-      <div class="provider-card">
-        <h4>🐙 GitHub</h4>
-        <p>Stores your knowledge .txt files and optionally hosts your website for free.</p>
-        <span class="badge">github.com — free</span>
-      </div>
-      <div class="provider-card">
-        <h4>🧠 Cerebras</h4>
-        <p>Second free AI provider. Used as backup when Groq is busy. Optional but recommended.</p>
-        <span class="badge">cloud.cerebras.ai — free</span>
-      </div>
-    </div>
-
-    <h3>Step by step — getting your API keys</h3>
-    <ul class="steps">
-      <li>
-        <span class="s-num">1</span>
-        <div class="s-body"><strong>Groq API Key</strong> Go to console.groq.com → sign in with Google → click API Keys in the left sidebar → Create API Key → copy the key starting with gsk_</div>
-      </li>
-      <li>
-        <span class="s-num">2</span>
-        <div class="s-body"><strong>Cerebras API Key</strong> Go to cloud.cerebras.ai → sign in with Google → go to API Keys → Create new key → copy it</div>
-      </li>
-      <li>
-        <span class="s-num">3</span>
-        <div class="s-body"><strong>Hugging Face Account</strong> Go to hf.co → sign up → verify email → you are ready</div>
-      </li>
-      <li>
-        <span class="s-num">4</span>
-        <div class="s-body"><strong>GitHub Account</strong> Go to github.com → sign up → verify email → you are ready</div>
-      </li>
-    </ul>
-
-    <div class="callout warn">
-      <span class="callout-icon">⚠️</span>
-      <div>Use a <strong>personal Gmail account</strong> for all signups — not a school or work account. School accounts often have API restrictions that will cause quota errors.</div>
-    </div>
-  </div>
-
-  <!-- SECTION 3 -->
-  <div class="section" id="hfspace">
-    <div class="section-header">
-      <div class="step-num">03</div>
-      <h2>Set Up Your Hugging Face Space</h2>
-    </div>
-
-    <p>A Hugging Face Space is a free server that runs your bot 24/7. Think of it as free cloud hosting for Python apps.</p>
-
-    <h3>Creating the Space</h3>
-    <ul class="steps">
-      <li>
-        <span class="s-num">1</span>
-        <div class="s-body"><strong>Go to huggingface.co/new-space</strong> while logged in</div>
-      </li>
-      <li>
-        <span class="s-num">2</span>
-        <div class="s-body"><strong>Fill in the form:</strong> Space name: your-name-assistant / SDK: Docker / Visibility: Public</div>
-      </li>
-      <li>
-        <span class="s-num">3</span>
-        <div class="s-body"><strong>Click Create Space</strong> — it will be empty for now</div>
-      </li>
-      <li>
-        <span class="s-num">4</span>
-        <div class="s-body"><strong>Add your API keys as secrets:</strong> Go to Settings → Variables and secrets → New secret. Add GROQ_API_KEY and CEREBRAS_API_KEY with your keys from Step 2</div>
-      </li>
-    </ul>
-
-    <h3>Files you need to create in your Space</h3>
-    <div class="file-tree">
+  <h3>Three files to create in your Space</h3>
+  <div class="tree">
 <span class="dir">your-space/</span>
-├── <span class="file">app.py</span>         <span class="note">← the AI backend (main file)</span>
-├── <span class="file">requirements.txt</span> <span class="note">← Python packages to install</span>
-└── <span class="file">Dockerfile</span>      <span class="note">← tells HF how to run your app</span>
-    </div>
+├── <span class="file">app.py</span>           <span class="note">← your AI backend (main file)</span>
+├── <span class="file">requirements.txt</span>   <span class="note">← Python packages to install</span>
+└── <span class="file">Dockerfile</span>        <span class="note">← tells HF how to run the app</span>
+  </div>
 
-    <h3>requirements.txt</h3>
-    <div class="code-block">
-      <div class="code-label">requirements.txt</div>
-      <pre>fastapi
+  <h3>requirements.txt</h3>
+  <div class="code"><div class="code-bar">requirements.txt</div><pre>fastapi
 uvicorn
 groq
-cerebras-cloud-sdk
 pydantic
-httpx</pre>
-    </div>
+httpx</pre></div>
 
-    <h3>Dockerfile</h3>
-    <div class="code-block">
-      <div class="code-label">Dockerfile</div>
-      <pre>FROM python:3.11-slim
+  <h3>Dockerfile</h3>
+  <div class="code"><div class="code-bar">Dockerfile</div><pre>FROM python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]</pre>
-    </div>
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]</pre></div>
 
-    <div class="callout success">
-      <span class="callout-icon">✅</span>
-      <div>After creating these files, your Space will build automatically. Wait 2-3 minutes then visit <strong>your-username-your-space-name.hf.space</strong> — if you see a JSON response it is working.</div>
-    </div>
-  </div>
+  <div class="box success"><span class="box-ico">✅</span><div>After creating all three files, your Space builds automatically. Wait 2-3 minutes then open <code>your-username-space-name.hf.space</code> — if you see JSON, it's running.</div></div>
+</div>
 
-  <!-- SECTION 4 -->
-  <div class="section" id="backend">
-    <div class="section-header">
-      <div class="step-num">04</div>
-      <h2>Write the Backend (app.py)</h2>
-    </div>
+<!-- 04 -->
+<div class="sec" id="s4">
+  <div class="sec-head"><div class="snum">04</div><h2>Write the Backend (app.py)</h2></div>
+  <p>This is the brain of your bot. Copy this complete template into <code>app.py</code>. You only need to change <strong>BOT_BASE</strong> and <strong>GITHUB_BASE</strong>.</p>
 
-    <p>This is the core of the bot. Copy this complete starting template into your <strong>app.py</strong> file on Hugging Face. Then customize the <strong>BOT_BASE</strong> prompt section with information about your own topic.</p>
-
-    <div class="code-block">
-      <div class="code-label">app.py — starter template</div>
-      <pre>import logging, os, httpx, time
+  <div class="code"><div class="code-bar">app.py — complete starter template</div><pre><span class="cm">import logging, os, httpx, time, re, json
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
-from cerebras.cloud.sdk import Cerebras
+from collections import defaultdict</span>
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("bot")
+logger = logging.getLogger(<span class="cs">"bot"</span>)
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"],
-                   allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=[<span class="cs">"*"</span>],
+                   allow_methods=[<span class="cs">"*"</span>], allow_headers=[<span class="cs">"*"</span>])
 
-<span class="comment"># ── Load API keys from HF Secrets ──</span>
-groq_key     = os.environ.get("GROQ_API_KEY")
-cerebras_key = os.environ.get("CEREBRAS_API_KEY")
+<span class="cm"># ── API keys from HF Secrets ──</span>
+groq_key         = os.environ.get(<span class="cs">"GROQ_API_KEY"</span>)
+turnstile_secret = os.environ.get(<span class="cs">"TURNSTILE_SECRET_KEY"</span>)
 
-groq_client     = Groq(api_key=groq_key)
-cerebras_client = Cerebras(api_key=cerebras_key) if cerebras_key else None
+if groq_key:
+    logger.info(f<span class="cs">"✅ GROQ_API_KEY loaded ({len(groq_key)} chars)"</span>)
+if turnstile_secret:
+    logger.info(f<span class="cs">"✅ TURNSTILE_SECRET_KEY loaded"</span>)
 
-<span class="comment"># ── Models to try in order ──</span>
+client = Groq(api_key=groq_key)
+
+<span class="cm"># ── Settings ──</span>
+MAX_MSG     = <span class="cv">500</span>
+DAILY_LIMIT = <span class="cv">150</span>
+CACHE_TTL   = <span class="cv">600</span>   <span class="cm"># 10 min knowledge cache</span>
+COOLDOWN    = <span class="cv">3</span>     <span class="cm"># seconds between messages</span>
+
+<span class="cm"># ── Models — tried in order, first working one wins ──</span>
 MODELS = [
-    ("groq",     "llama-3.1-8b-instant"),   <span class="comment"># fast</span>
-    ("groq",     "llama-3.3-70b-versatile"), <span class="comment"># smart</span>
-    ("cerebras", "llama3.1-8b"),             <span class="comment"># backup</span>
-    ("groq",     "gemma-7b-it"),             <span class="comment"># last resort</span>
+    <span class="cs">"llama-3.1-8b-instant"</span>,    <span class="cm"># fast</span>
+    <span class="cs">"llama-3.3-70b-versatile"</span>,  <span class="cm"># smart</span>
+    <span class="cs">"gemma-7b-it"</span>,              <span class="cm"># fallback</span>
 ]
 
-<span class="comment"># ── GitHub knowledge files ──</span>
-GITHUB_BASE = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"
+<span class="cm"># ── CHANGE THIS to your GitHub username and repo name ──</span>
+GITHUB_BASE = <span class="cs">"https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"</span>
 
-<span class="comment"># ── Your bot's personality and topic ──</span>
-<span class="comment"># CHANGE THIS to describe your own website/community</span>
-BOT_BASE = """
-You are [YOUR BOT NAME] — the official AI support bot for [YOUR WEBSITE].
-
-[YOUR WEBSITE] is about: [DESCRIBE WHAT YOUR SITE IS ABOUT]
-
-You ONLY answer questions about [YOUR TOPIC].
-Be friendly, clear, and helpful.
-If you don't know something, say so honestly.
-"""
-
-KNOWLEDGE_CACHE_TTL = 600  <span class="comment"># cache files 10 minutes</span>
+<span class="cm"># ── State ──</span>
 knowledge_cache = {}
+user_daily      = defaultdict(lambda: {<span class="cs">"count"</span>: <span class="cv">0</span>, <span class="cs">"date"</span>: <span class="cs">""</span>})
+user_last_msg   = defaultdict(float)
+verified_users  = set()  <span class="cm"># captcha verified — cached server-side</span>
 
-async def fetch_knowledge(source: str) -> str:
+<span class="cm"># ────────────────────────────────────────────────
+# YOUR BOT — CHANGE THIS SECTION
+# Replace with info about your own site/community
+# ────────────────────────────────────────────────</span>
+BOT_BASE = <span class="cs">"""
+You are [YOUR BOT NAME] — the official AI assistant for [YOUR WEBSITE].
+
+[YOUR WEBSITE] is about: [DESCRIBE YOUR SITE IN 2-3 SENTENCES]
+
+Topics you help with:
+- [Topic 1 — e.g. how to download files]
+- [Topic 2 — e.g. how to join the community]
+- [Topic 3 — e.g. rules and guidelines]
+
+Important rules:
+- [Rule 1]
+- [Rule 2]
+
+Contact / Discord: [YOUR LINK]
+
+Respond in a friendly, clear, and helpful way.
+Use bullet points for step-by-step instructions.
+If you don't know something specific, say so and
+point them to your Discord or contact link.
+"""</span>
+
+async def fetch_knowledge(source: str, message: str = <span class="cs">""</span>) -> str:
+    <span class="cm">"""Load a .txt knowledge file from GitHub with 10-minute cache."""</span>
     now = time.time()
     if source in knowledge_cache:
-        if now - knowledge_cache[source]["timestamp"] < KNOWLEDGE_CACHE_TTL:
-            return knowledge_cache[source]["content"]
-    url = f"{GITHUB_BASE}/{source}.txt"
+        if now - knowledge_cache[source][<span class="cs">"t"</span>] < CACHE_TTL:
+            content = knowledge_cache[source][<span class="cs">"c"</span>]
+            logger.info(f<span class="cs">"📦 Cache hit: {source}"</span>)
+            return content
+    url = f<span class="cs">"{GITHUB_BASE}/{source}.txt"</span>
     try:
-        async with httpx.AsyncClient(timeout=10.0) as c:
+        async with httpx.AsyncClient(timeout=<span class="cv">10.0</span>) as c:
             r = await c.get(url)
-            if r.status_code == 200:
-                knowledge_cache[source] = {"content": r.text[:4000], "timestamp": now}
-                return r.text[:4000]
+            if r.status_code == <span class="cv">200</span>:
+                text = r.text[:<span class="cv">4000</span>]
+                knowledge_cache[source] = {<span class="cs">"c"</span>: text, <span class="cs">"t"</span>: now}
+                logger.info(f<span class="cs">"📡 Fetched {source}.txt ({len(text)} chars)"</span>)
+                return text
+    except Exception as e:
+        logger.error(f<span class="cs">"❌ Knowledge fetch error: {e}"</span>)
+    return <span class="cs">""</span>
+
+async def verify_captcha(token: str, ip: str) -> bool:
+    <span class="cm">"""Verify Cloudflare Turnstile token. Returns True if human."""</span>
+    if not turnstile_secret:
+        return True  <span class="cm"># No secret = disabled, allow everyone</span>
+    if not token:
+        return False
+    try:
+        async with httpx.AsyncClient(timeout=<span class="cv">10.0</span>) as c:
+            r = await c.post(
+                <span class="cs">"https://challenges.cloudflare.com/turnstile/v0/siteverify"</span>,
+                data={<span class="cs">"secret"</span>: turnstile_secret, <span class="cs">"response"</span>: token, <span class="cs">"remoteip"</span>: ip}
+            )
+            result = r.json()
+            if result.get(<span class="cs">"success"</span>):
+                logger.info(f<span class="cs">"✅ Captcha verified: {ip}"</span>)
+                return True
+            logger.warning(f<span class="cs">"🤖 Captcha failed: {result.get('error-codes')}"</span>)
+            return False
     except:
-        pass
-    return ""
+        return True  <span class="cm"># On error allow through — don't block real users</span>
+
+def get_user_id(request: Request) -> str:
+    token = request.headers.get(<span class="cs">"x-user-token"</span>, <span class="cs">""</span>)
+    if token and len(token) > <span class="cv">8</span>: return f<span class="cs">"token:{token}"</span>
+    fwd = request.headers.get(<span class="cs">"X-Forwarded-For"</span>)
+    if fwd: return f<span class="cs">"ip:{fwd.split(',')[0].strip()}"</span>
+    return f<span class="cs">"ip:{request.client.host}"</span>
+
+def get_user_ip(request: Request) -> str:
+    fwd = request.headers.get(<span class="cs">"X-Forwarded-For"</span>)
+    return fwd.split(<span class="cs">","</span>)[<span class="cv">0</span>].strip() if fwd else request.client.host
+
+def check_daily(user_id: str) -> bool:
+    today = time.strftime(<span class="cs">"%Y-%m-%d"</span>)
+    d = user_daily[user_id]
+    if d[<span class="cs">"date"</span>] != today: d[<span class="cs">"date"</span>] = today; d[<span class="cs">"count"</span>] = <span class="cv">0</span>
+    d[<span class="cs">"count"</span>] += <span class="cv">1</span>
+    return d[<span class="cs">"count"</span>] <= DAILY_LIMIT
 
 class ChatRequest(BaseModel):
-    message: str
-    history: list = []
-    source: str = "general"
+    message:       str
+    history:       list = []
+    source:        str  = <span class="cs">"general"</span>
+    captcha_token: str  = <span class="cs">""</span>
 
-@app.post("/chat")
+@app.post(<span class="cs">"/chat"</span>)
 async def chat(req: ChatRequest, request: Request):
-    <span class="comment"># Basic length check</span>
-    if len(req.message) > 600:
-        return {"ok": False, "response": "Message too long. Keep it under 600 characters."}
+    user_id = get_user_id(request)
+    user_ip = get_user_ip(request)
+
+    <span class="cm"># ── Captcha: verify once, cache server-side ──
+    # Tokens are single-use! Never re-verify the same token.
+    # Once a user passes, store their ID and skip verification.</span>
+    if user_id not in verified_users:
+        if not await verify_captcha(req.captcha_token, user_ip):
+            return {<span class="cs">"ok"</span>: False, <span class="cs">"captcha"</span>: True,
+                    <span class="cs">"response"</span>: <span class="cs">"⛔ Verification failed. Please verify again."</span>}
+        verified_users.add(user_id)
+        logger.info(f<span class="cs">"✅ User verified: {user_id[:30]}"</span>)
+
+    <span class="cm"># ── Basic checks ──</span>
     if not req.message.strip():
-        return {"ok": False, "response": "Please type a message first."}
+        return {<span class="cs">"ok"</span>: False, <span class="cs">"response"</span>: <span class="cs">"Please type a message."</span>}
+    if len(req.message) > MAX_MSG:
+        return {<span class="cs">"ok"</span>: False, <span class="cs">"response"</span>: f<span class="cs">"Message too long. Max {MAX_MSG} characters."</span>}
+    if not check_daily(user_id):
+        return {<span class="cs">"ok"</span>: False, <span class="cs">"response"</span>: <span class="cs">"Daily limit reached. Try again tomorrow."</span>}
+    now = time.time()
+    if now - user_last_msg[user_id] < COOLDOWN:
+        return {<span class="cs">"ok"</span>: False, <span class="cs">"response"</span>: <span class="cs">"⏳ Sending too fast. Please wait a moment."</span>}
+    user_last_msg[user_id] = now
 
-    <span class="comment"># Load knowledge for this page</span>
-    knowledge = await fetch_knowledge(req.source)
+    <span class="cm"># ── Load knowledge for this page ──</span>
+    knowledge = await fetch_knowledge(req.source, req.message)
 
+    <span class="cm"># ── Build system prompt ──</span>
     system_prompt = BOT_BASE
     if knowledge:
-        system_prompt += f"\n\nKNOWLEDGE BASE:\n{knowledge}"
-    system_prompt += "\n\nBe concise and helpful."
+        system_prompt += f<span class="cs">"\n\nKNOWLEDGE BASE FOR THIS PAGE:\n{knowledge}"</span>
+    system_prompt += <span class="cs">"\n\nBe helpful and concise. Use bullet points for steps."</span>
 
-    messages = [{"role": "system", "content": system_prompt}]
-    for msg in req.history[-10:]:
-        role = "user" if msg["role"] == "user" else "assistant"
-        messages.append({"role": role, "content": msg["content"]})
-    messages.append({"role": "user", "content": req.message})
+    messages = [{<span class="cs">"role"</span>: <span class="cs">"system"</span>, <span class="cs">"content"</span>: system_prompt}]
+    for msg in req.history[-<span class="cv">8</span>:]:
+        role = <span class="cs">"user"</span> if msg[<span class="cs">"role"</span>] == <span class="cs">"user"</span> else <span class="cs">"assistant"</span>
+        messages.append({<span class="cs">"role"</span>: role, <span class="cs">"content"</span>: msg[<span class="cs">"content"</span>]})
+    messages.append({<span class="cs">"role"</span>: <span class="cs">"user"</span>, <span class="cs">"content"</span>: req.message})
 
-    <span class="comment"># Try each model until one works</span>
-    for provider, model in MODELS:
+    <span class="cm"># ── Try models in order ──</span>
+    for model in MODELS:
         try:
-            if provider == "groq":
-                resp = groq_client.chat.completions.create(
-                    model=model, messages=messages,
-                    temperature=0.5, max_tokens=1024, timeout=15)
-                reply = resp.choices[0].message.content
-            elif provider == "cerebras" and cerebras_client:
-                resp = cerebras_client.chat.completions.create(
-                    model=model, messages=messages,
-                    temperature=0.5, max_tokens=1024)
-                reply = resp.choices[0].message.content
-            else:
-                continue
-            return {"ok": True, "response": reply}
+            logger.info(f<span class="cs">"🤖 Trying: {model}"</span>)
+            resp = client.chat.completions.create(
+                model=model, messages=messages,
+                temperature=<span class="cv">0.5</span>, max_tokens=<span class="cv">1024</span>, timeout=<span class="cv">15</span>
+            )
+            reply = resp.choices[<span class="cv">0</span>].message.content
+            logger.info(f<span class="cs">"✅ Response from {model}"</span>)
+            return {<span class="cs">"ok"</span>: True, <span class="cs">"response"</span>: reply}
         except Exception as e:
-            if any(x in str(e).lower() for x in ["429","decommissioned","not found"]):
+            err = str(e).lower()
+            if any(x in err for x in [<span class="cs">"429"</span>, <span class="cs">"decommissioned"</span>, <span class="cs">"not found"</span>, <span class="cs">"unavailable"</span>]):
+                logger.warning(f<span class="cs">"⚠️ {model} skipped: {str(e)[:60]}"</span>)
                 continue
+            logger.error(f<span class="cs">"❌ {model}: {e}"</span>)
             raise
 
-    return {"ok": False, "response": "I'm at capacity right now. Please try again soon."}
+    return {<span class="cs">"ok"</span>: False,
+            <span class="cs">"response"</span>: <span class="cs">"I'm at capacity right now. Please try again in a moment."</span>}
 
-@app.get("/")
-def root():
-    return {"status": "Bot is running", "version": "1.0"}
+@app.get(<span class="cs">"/"</span>)
+def root(): return {<span class="cs">"status"</span>: <span class="cs">"Bot running"</span>, <span class="cs">"version"</span>: <span class="cs">"1.0"</span>}
 
-@app.get("/health")
-def health():
-    return {"ok": True}</pre>
-    </div>
+@app.get(<span class="cs">"/status"</span>)
+def status(): return {<span class="cs">"ok"</span>: True, <span class="cs">"locked"</span>: False, <span class="cs">"unlock_in"</span>: <span class="cv">0</span>}</pre></div>
 
-    <div class="callout tip">
-      <span class="callout-icon">🔧</span>
-      <div>The only things you <strong>must</strong> change are: <br>
-      1. <code>YOUR_USERNAME/YOUR_REPO</code> → your GitHub repo path<br>
-      2. The <code>BOT_BASE</code> text → describe your own website and topic</div>
-    </div>
-  </div>
+  <div class="box tip"><span class="box-ico">🔧</span><div>The two things you <strong>must change</strong>: (1) <code>BOT_BASE</code> — describe your own site, (2) <code>GITHUB_BASE</code> — your actual GitHub username and repo name.</div></div>
+</div>
 
-  <!-- SECTION 5 -->
-  <div class="section" id="knowledge">
-    <div class="section-header">
-      <div class="step-num">05</div>
-      <h2>Create Your Knowledge Files</h2>
-    </div>
+<!-- 05 -->
+<div class="sec" id="s5">
+  <div class="sec-head"><div class="snum">05</div><h2>Create Your Knowledge Files</h2></div>
+  <p>Knowledge files are <strong>plain .txt files on GitHub</strong> that the bot reads before answering questions. This makes your bot give accurate answers about your specific topic.</p>
 
-    <p>Knowledge files are plain <strong>.txt files</strong> stored in a GitHub repo. The bot downloads and reads these files before answering questions so it gives accurate answers about your specific topic.</p>
+  <h3>Create the GitHub repo</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div>Go to <code>github.com/new</code> → create a <strong>public</strong> repo named something like <code>my-bot-knowledge</code></div></li>
+    <li><span class="sn">2</span><div>Click <strong>Add file → Create new file</strong> → name it <code>general.txt</code></div></li>
+    <li><span class="sn">3</span><div>Write your content in plain text (no markdown, no HTML — just sentences)</div></li>
+    <li><span class="sn">4</span><div>Click <strong>Commit changes</strong> — live immediately, bot picks it up within 10 minutes</div></li>
+  </ul>
 
-    <h3>Create your GitHub repo</h3>
-    <ul class="steps">
-      <li>
-        <span class="s-num">1</span>
-        <div class="s-body"><strong>Go to github.com/new</strong> and create a new public repository. Name it something like <code>my-bot-knowledge</code></div>
-      </li>
-      <li>
-        <span class="s-num">2</span>
-        <div class="s-body"><strong>Create your first file</strong> — click Add file → Create new file → name it <code>general.txt</code></div>
-      </li>
-      <li>
-        <span class="s-num">3</span>
-        <div class="s-body"><strong>Write your content</strong> in plain text — no markdown, no HTML, just clear sentences about your topic</div>
-      </li>
-      <li>
-        <span class="s-num">4</span>
-        <div class="s-body"><strong>Click Commit changes</strong> — the file is now live and your bot can read it</div>
-      </li>
-    </ul>
-
-    <h3>What to write in your knowledge files</h3>
-
-    <div class="code-block">
-      <div class="code-label">general.txt — example structure</div>
-      <pre>WHAT IS [YOUR SITE]
-[Your site name] is a [describe what it is].
+  <h3>Recommended file structure</h3>
+  <div class="code"><div class="code-bar">general.txt — example layout</div><pre>WHAT IS [YOUR SITE NAME]
+[Your site] is a [describe what it is in 2-3 sentences].
 It was created by [your name] for [your audience].
-[One more sentence about the main purpose].
 
-HOW TO [MAIN ACTION ON YOUR SITE]
-1. [First step]
+HOW TO [MAIN THING PEOPLE DO ON YOUR SITE]
+1. [First step — be specific]
 2. [Second step]
 3. [Third step]
+4. [Fourth step]
 
 COMMON QUESTIONS
-QUESTION: [Common thing people ask]
+
+QUESTION: [Something people ask often]
 ANSWER: [Clear answer in 1-2 sentences]
 
 QUESTION: [Another common question]
 ANSWER: [Clear answer]
 
-RULES AND GUIDELINES
-- [Important rule 1]
-- [Important rule 2]
-- [Important rule 3]
+RULES
+- [Rule 1]
+- [Rule 2]
+- [Rule 3]
 
-CONTACT AND LINKS
-For more help: [your discord / email / contact]
-Website: [your website URL]</pre>
-    </div>
+CONTACT
+Discord: [your invite link]
+Website: [your URL]</pre></div>
 
-    <div class="callout info">
-      <span class="callout-icon">💡</span>
-      <div><strong>One file per topic works best.</strong> For example: <code>general.txt</code> for overall info, <code>getting-started.txt</code> for beginners, <code>faq.txt</code> for common questions. Each page on your site can load a different file.</div>
-    </div>
+  <div class="box info"><span class="box-ico">💡</span><div><strong>One file per topic.</strong> Examples: <code>general.txt</code> for overall info, <code>faq.txt</code> for questions, <code>getting-started.txt</code> for new users. Change the <code>SOURCE</code> in the widget per page to load the matching file.</div></div>
 
-    <h3>Update your app.py GitHub URL</h3>
-    <p>Go back to your <code>app.py</code> on Hugging Face and change this line to point to your new repo:</p>
+  <h3>Update app.py with your repo URL</h3>
+  <div class="code"><div class="code-bar">app.py — find and change this line</div><pre><span class="cm"># Change to your actual GitHub username and repo name:</span>
+GITHUB_BASE = <span class="cs">"https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"</span>
 
-    <div class="code-block">
-      <div class="code-label">app.py — update this line</div>
-      <pre><span class="comment"># Change this to your actual GitHub username and repo name:</span>
-GITHUB_BASE = "https://raw.githubusercontent.com/<span class="str">YOUR_USERNAME</span>/<span class="str">YOUR_REPO</span>/main"
+<span class="cm"># Example:</span>
+GITHUB_BASE = <span class="cs">"https://raw.githubusercontent.com/johnsmith/my-bot-knowledge/main"</span></pre></div>
+</div>
 
-<span class="comment"># Example:</span>
-GITHUB_BASE = "https://raw.githubusercontent.com/<span class="str">johnsmith</span>/<span class="str">my-bot-knowledge</span>/main"</pre>
-    </div>
-  </div>
+<!-- 06 -->
+<div class="sec" id="s6">
+  <div class="sec-head"><div class="snum">06</div><h2>Add Cloudflare Turnstile Captcha</h2></div>
+  <p>Captcha verification stops bots from spamming your chat and draining your free API quota. Cloudflare Turnstile is the best free option — it works invisibly for most real users.</p>
 
-  <!-- SECTION 6 -->
-  <div class="section" id="widget">
-    <div class="section-header">
-      <div class="step-num">06</div>
-      <h2>Add the Chat Widget to Your Site</h2>
-    </div>
+  <div class="box success"><span class="box-ico">✅</span><div><strong>Why Turnstile?</strong> Completely free, no credit card, works on any website including GitHub Pages, and most real users pass it without doing anything at all — no puzzle solving required.</div></div>
 
-    <p>The widget is a floating chat button that appears on your website. It connects to your Hugging Face backend and lets visitors chat with your bot. Adding it to any HTML page takes 3 copy-pastes.</p>
+  <h3>Step 1 — Create your Turnstile widget on Cloudflare</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div>Go to <code>dash.cloudflare.com</code> → sign in → left sidebar: <strong>Turnstile</strong></div></li>
+    <li><span class="sn">2</span><div>Click <strong>Add site</strong> → Site name: anything → Domain: your GitHub Pages domain, e.g. <code>yourusername.github.io</code></div></li>
+    <li><span class="sn">3</span><div>Widget type: <strong>Managed</strong> — this is invisible, no puzzle for users</div></li>
+    <li><span class="sn">4</span><div>Click <strong>Create</strong> → you get two keys: <strong>Site Key</strong> (public — goes in HTML) and <strong>Secret Key</strong> (private — goes in HF Secrets only)</div></li>
+  </ul>
 
-    <h3>Step 1 — Add CSS to your &lt;head&gt;</h3>
-    <div class="code-block">
-      <div class="code-label">Paste inside your &lt;head&gt; tag</div>
-      <pre><span class="key">&lt;style&gt;</span>
-#bot-btn{position:fixed;bottom:24px;right:24px;z-index:99999;width:56px;height:56px;
-border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;
-cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.5);font-size:24px;
-display:flex;align-items:center;justify-content:center;
-transition:transform .2s;}
+  <div class="box danger"><span class="box-ico">🔐</span><div><strong>Never put your Secret Key in HTML or JavaScript.</strong> It goes only in Hugging Face Secrets. The Site Key is safe to put in HTML — it's designed to be public.</div></div>
+
+  <h3>Step 2 — Add Secret Key to Hugging Face</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div>HF Space → <strong>Settings → Variables and secrets → New secret</strong></div></li>
+    <li><span class="sn">2</span><div>Name: <code>TURNSTILE_SECRET_KEY</code> → paste your Secret Key → Save</div></li>
+    <li><span class="sn">3</span><div>Click <strong>Factory reboot</strong> to restart with the new secret</div></li>
+  </ul>
+
+  <div class="box warn"><span class="box-ico">⚠️</span><div><strong>Important: Cloudflare tokens are single-use.</strong> Each token can only be verified once. The backend in this guide caches verification server-side after the first successful check, so users don't need to reverify every message. This is already handled in the app.py template above — don't change that logic or users will get stuck in a verification loop.</div></div>
+</div>
+
+<!-- 07 -->
+<div class="sec" id="s7">
+  <div class="sec-head"><div class="snum">07</div><h2>Add the Chat Widget to Your Site</h2></div>
+  <p>Three copy-paste blocks to add the floating chat button to any HTML page.</p>
+
+  <h3>Block 1 — Add to your &lt;head&gt;</h3>
+  <div class="code"><div class="code-bar">HTML &lt;head&gt; — Turnstile script + widget styles</div><pre>&lt;!-- Cloudflare Turnstile --&gt;
+&lt;script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer&gt;&lt;/script&gt;
+
+&lt;style&gt;
+#bot-btn{position:fixed;bottom:24px;right:24px;z-index:9999;
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#6366f1,#22d3ee);
+  box-shadow:0 4px 20px rgba(99,102,241,0.5);font-size:24px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s;}
 #bot-btn:hover{transform:scale(1.1);}
-#bot-panel{position:fixed;bottom:90px;right:24px;z-index:99998;width:340px;
-max-width:calc(100vw - 48px);background:rgba(10,14,26,0.97);
-border:1.5px solid rgba(124,58,237,0.4);border-radius:16px;
-display:flex;flex-direction:column;max-height:520px;
-transform:scale(0.9) translateY(16px);opacity:0;pointer-events:none;
-transition:all 0.25s cubic-bezier(.4,0,.2,1);}
+#bot-panel{position:fixed;bottom:90px;right:24px;z-index:9998;
+  width:340px;max-width:calc(100vw - 48px);
+  background:rgba(10,14,26,0.97);border:1.5px solid rgba(99,102,241,0.35);
+  border-radius:16px;display:flex;flex-direction:column;max-height:520px;
+  transform:scale(0.9) translateY(16px);opacity:0;pointer-events:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);}
 #bot-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
-#bot-header{background:rgba(124,58,237,0.15);padding:14px 16px;
-display:flex;align-items:center;gap:10px;
-border-bottom:1px solid rgba(255,255,255,0.07);}
-#bot-title{font-weight:900;font-size:14px;color:#fff;font-family:sans-serif;}
-#bot-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;font-family:sans-serif;}
-#bot-dot{width:8px;height:8px;border-radius:50%;background:#10b981;
-margin-left:auto;box-shadow:0 0 6px #10b981;}
-#bot-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;
-flex-direction:column;gap:10px;font-family:sans-serif;}
-.bot-msg{max-width:85%;padding:10px 13px;border-radius:12px;
-font-size:13.5px;line-height:1.6;word-break:break-word;}
-.bot-msg.user{align-self:flex-end;background:linear-gradient(135deg,#7c3aed,#06b6d4);
-color:#fff;}
-.bot-msg.bot{align-self:flex-start;background:rgba(255,255,255,0.06);
-border:1px solid rgba(255,255,255,0.08);color:#e2e8f0;}
-.bot-typing{align-self:flex-start;background:rgba(255,255,255,0.06);
-border:1px solid rgba(255,255,255,0.08);border-radius:12px;
-padding:10px 14px;display:flex;gap:5px;align-items:center;}
-.bot-dot-anim{width:7px;height:7px;border-radius:50%;background:rgba(124,58,237,0.8);
-animation:bb .9s ease-in-out infinite;}
-.bot-dot-anim:nth-child(2){animation-delay:.15s;}
-.bot-dot-anim:nth-child(3){animation-delay:.3s;}
+#bot-head{background:rgba(99,102,241,0.12);padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  display:flex;align-items:center;gap:10px;}
+#bot-title{font-weight:800;font-size:14px;color:#fff;font-family:sans-serif;}
+#bot-sub{font-size:11px;color:rgba(255,255,255,0.4);font-family:sans-serif;}
+#bot-dot{width:8px;height:8px;border-radius:50%;
+  background:#10b981;box-shadow:0 0 6px #10b981;margin-left:auto;}
+#bot-msgs{flex:1;overflow-y:auto;padding:14px;
+  display:flex;flex-direction:column;gap:10px;font-family:sans-serif;}
+.bmsg{max-width:85%;padding:10px 13px;border-radius:12px;
+  font-size:13.5px;line-height:1.6;word-break:break-word;}
+.bmsg.user{align-self:flex-end;
+  background:linear-gradient(135deg,#6366f1,#22d3ee);color:#fff;}
+.bmsg.bot{align-self:flex-start;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#e2e8f0;}
+.btyping{align-self:flex-start;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);border-radius:12px;
+  padding:10px 14px;display:flex;gap:5px;align-items:center;}
+.bdot{width:7px;height:7px;border-radius:50%;background:rgba(99,102,241,.8);
+  animation:bb .9s ease-in-out infinite;}
+.bdot:nth-child(2){animation-delay:.15s;}.bdot:nth-child(3){animation-delay:.3s;}
 @keyframes bb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
 #bot-input-row{display:flex;gap:8px;padding:10px 12px;
-border-top:1px solid rgba(255,255,255,0.07);}
+  border-top:1px solid rgba(255,255,255,0.07);}
 #bot-input{flex:1;background:rgba(255,255,255,0.06);
-border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;
-padding:9px 13px;color:#fff;font-size:13px;font-family:sans-serif;
-outline:none;resize:none;max-height:80px;}
-#bot-input:focus{border-color:rgba(124,58,237,0.6);}
-#bot-input::placeholder{color:rgba(255,255,255,0.3);}
-#bot-send{width:38px;height:38px;border-radius:10px;
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
-border:none;cursor:pointer;color:#fff;font-size:17px;
-display:flex;align-items:center;justify-content:center;align-self:flex-end;}
-#bot-footer{text-align:center;font-size:10px;color:rgba(255,255,255,0.2);
-padding:4px 0 8px;font-family:sans-serif;}
-<span class="key">&lt;/style&gt;</span></pre>
-    </div>
+  border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;
+  padding:9px 13px;color:#fff;font-size:13px;font-family:sans-serif;
+  outline:none;resize:none;max-height:80px;}
+#bot-input:focus{border-color:rgba(99,102,241,.6);}
+#bot-input::placeholder{color:rgba(255,255,255,.3);}
+#bot-send{width:38px;height:38px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#6366f1,#22d3ee);
+  cursor:pointer;color:#fff;font-size:17px;
+  display:flex;align-items:center;justify-content:center;align-self:flex-end;}
+#bot-footer{text-align:center;font-size:10px;
+  color:rgba(255,255,255,0.2);padding:4px 0 8px;font-family:sans-serif;}
+&lt;/style&gt;</pre></div>
 
-    <h3>Step 2 — Add HTML before your &lt;/body&gt;</h3>
-    <div class="code-block">
-      <div class="code-label">Paste right before &lt;/body&gt;</div>
-      <pre><span class="comment">&lt;!-- Bot Widget --&gt;</span>
-<span class="key">&lt;button</span> id="bot-btn" title="Chat with us"<span class="key">&gt;</span>🤖<span class="key">&lt;/button&gt;</span>
-<span class="key">&lt;div</span> id="bot-panel"<span class="key">&gt;</span>
-  <span class="key">&lt;div</span> id="bot-header"<span class="key">&gt;</span>
-    <span class="key">&lt;div&gt;</span>
-      <span class="key">&lt;div</span> id="bot-title"<span class="key">&gt;</span>Bot Assistant<span class="key">&lt;/div&gt;</span>
-      <span class="key">&lt;div</span> id="bot-sub"<span class="key">&gt;</span>Your Site Name<span class="key">&lt;/div&gt;</span>
-    <span class="key">&lt;/div&gt;</span>
-    <span class="key">&lt;div</span> id="bot-dot"<span class="key">&gt;&lt;/div&gt;</span>
-  <span class="key">&lt;/div&gt;</span>
-  <span class="key">&lt;div</span> id="bot-msgs"<span class="key">&gt;</span>
-    <span class="key">&lt;div</span> class="bot-msg bot"<span class="key">&gt;</span>Hey! 👋 Ask me anything about our site!<span class="key">&lt;/div&gt;</span>
-  <span class="key">&lt;/div&gt;</span>
-  <span class="key">&lt;div</span> id="bot-input-row"<span class="key">&gt;</span>
-    <span class="key">&lt;textarea</span> id="bot-input" placeholder="Ask me anything..." rows="1"<span class="key">&gt;&lt;/textarea&gt;</span>
-    <span class="key">&lt;button</span> id="bot-send"<span class="key">&gt;</span>➤<span class="key">&lt;/button&gt;</span>
-  <span class="key">&lt;/div&gt;</span>
-  <span class="key">&lt;div</span> id="bot-footer"<span class="key">&gt;</span>Powered by AI<span class="key">&lt;/div&gt;</span>
-<span class="key">&lt;/div&gt;</span></pre>
-    </div>
+  <h3>Block 2 — Add before &lt;/body&gt;</h3>
+  <div class="code"><div class="code-bar">HTML — widget structure with captcha</div><pre>&lt;button id="bot-btn" title="Chat"&gt;🤖&lt;/button&gt;
+&lt;div id="bot-panel"&gt;
+  &lt;div id="bot-head"&gt;
+    &lt;div&gt;
+      &lt;div id="bot-title"&gt;AI Assistant&lt;/div&gt;
+      &lt;div id="bot-sub"&gt;Your Site Name&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id="bot-dot"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div id="bot-msgs"&gt;
+    &lt;div class="bmsg bot"&gt;Hey! 👋 Ask me anything!&lt;/div&gt;
+  &lt;/div&gt;
 
-    <h3>Step 3 — Add JavaScript after the HTML</h3>
-    <div class="code-block">
-      <div class="code-label">Paste after the HTML above, still before &lt;/body&gt;</div>
-      <pre><span class="key">&lt;script&gt;</span>
+  &lt;!-- Captcha — shown before user can chat --&gt;
+  &lt;div id="captcha-wrap" style="padding:12px;display:none;"&gt;
+    &lt;div class="cf-turnstile"
+         data-sitekey="YOUR_SITE_KEY_HERE"
+         data-callback="onCaptchaDone"
+         data-theme="dark"
+         data-size="flexible"&gt;
+    &lt;/div&gt;
+    &lt;p style="text-align:center;font-size:11px;color:#666;margin-top:6px;font-family:sans-serif;"&gt;
+      Verify you're human to start chatting
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Input — shown after captcha passes --&gt;
+  &lt;div id="bot-input-row"&gt;
+    &lt;textarea id="bot-input" placeholder="Ask me anything..." rows="1"&gt;&lt;/textarea&gt;
+    &lt;button id="bot-send"&gt;➤&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id="bot-footer"&gt;Powered by AI&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+  <h3>Block 3 — Add after Block 2</h3>
+  <div class="code"><div class="code-bar">JavaScript — full widget logic</div><pre>&lt;script&gt;
 (function(){
-  <span class="comment">// ← CHANGE THESE TWO LINES:</span>
-  const API_URL = '<span class="str">https://YOUR-USERNAME-YOUR-SPACE-NAME.hf.space/chat</span>';
-  const SOURCE  = '<span class="str">general</span>'; <span class="comment">// knowledge file to load (without .txt)</span>
+  <span class="cm">// ← CHANGE THESE TWO LINES for each page:</span>
+  const API    = <span class="cs">'https://YOUR-HF-USERNAME-YOUR-SPACE-NAME.hf.space/chat'</span>;
+  const SOURCE = <span class="cs">'general'</span>; <span class="cm">// knowledge file name without .txt</span>
 
-  let history=[], isOpen=false, isLoading=false;
-  const btn=document.getElementById('bot-btn');
-  const panel=document.getElementById('bot-panel');
-  const msgs=document.getElementById('bot-msgs');
-  const input=document.getElementById('bot-input');
-  const send=document.getElementById('bot-send');
+  <span class="cm">// Persistent user token for rate limiting</span>
+  let token = localStorage.getItem(<span class="cs">'bot_token'</span>);
+  if (!token) { token = crypto.randomUUID(); localStorage.setItem(<span class="cs">'bot_token'</span>, token); }
+  const HEADERS = {<span class="cs">'Content-Type'</span>: <span class="cs">'application/json'</span>, <span class="cs">'x-user-token'</span>: token};
 
-  btn.addEventListener('click',()=>{
-    isOpen=!isOpen;
-    panel.classList.toggle('open',isOpen);
-    btn.textContent=isOpen?'✕':'🤖';
-    if(isOpen)input.focus();
-  });
-  input.addEventListener('input',()=>{
-    input.style.height='auto';
-    input.style.height=Math.min(input.scrollHeight,80)+'px';
-  });
-  input.addEventListener('keydown',(e)=>{
-    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
-  });
-  send.addEventListener('click',sendMsg);
+  <span class="cm">// Captcha — sessionStorage clears on page refresh (intentional)
+  // This means users verify once per browser session, not every message</span>
+  let captchaVerified = sessionStorage.getItem(<span class="cs">'bot_captcha'</span>) === <span class="cs">'yes'</span>;
+  let captchaToken    = null;
 
-  async function sendMsg(){
-    const text=input.value.trim();
-    if(!text||isLoading)return;
-    addMsg('user',text);
-    history.push({role:'user',content:text});
-    input.value='';input.style.height='auto';
-    const typing=addTyping();
-    isLoading=true;input.disabled=true;send.disabled=true;
-    try{
-      const res=await fetch(API_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:text,history:history.slice(0,-1),source:SOURCE})
-      });
-      const data=await res.json();
-      const reply=data.response||'Sorry, something went wrong. Please try again.';
-      history.push({role:'assistant',content:reply});
-      typing.remove();addMsg('bot',reply);
-    }catch(e){
-      typing.remove();
-      addMsg('bot','⚠️ Could not connect. Please try again in a moment.');
-    }finally{
-      isLoading=false;input.disabled=false;send.disabled=false;input.focus();
+  <span class="cm">// Called by Cloudflare when user passes captcha</span>
+  window.onCaptchaDone = function(t) {
+    captchaToken = t;
+    captchaVerified = true;
+    sessionStorage.setItem(<span class="cs">'bot_captcha'</span>, <span class="cs">'yes'</span>);
+    document.getElementById(<span class="cs">'captcha-wrap'</span>).style.display = <span class="cs">'none'</span>;
+    document.getElementById(<span class="cs">'bot-input-row'</span>).style.display = <span class="cs">'flex'</span>;
+    document.getElementById(<span class="cs">'bot-footer'</span>).textContent = <span class="cs">'Powered by AI'</span>;
+    input.focus();
+  };
+
+  function showCaptchaUI() {
+    const w = document.getElementById(<span class="cs">'captcha-wrap'</span>);
+    const r = document.getElementById(<span class="cs">'bot-input-row'</span>);
+    const f = document.getElementById(<span class="cs">'bot-footer'</span>);
+    if (captchaVerified) {
+      w.style.display = <span class="cs">'none'</span>; r.style.display = <span class="cs">'flex'</span>;
+    } else {
+      w.style.display = <span class="cs">'block'</span>; r.style.display = <span class="cs">'none'</span>;
+      if (f) f.textContent = <span class="cs">'🔒 Verify to start chatting'</span>;
     }
   }
 
-  function addMsg(role,text){
-    const d=document.createElement('div');
-    d.className='bot-msg '+role;
-    d.innerHTML=text
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-      .replace(/\n/g,'<br>');
-    msgs.appendChild(d);
-    msgs.scrollTop=msgs.scrollHeight;
-    return d;
+  let history=[], isOpen=false, isLoading=false;
+  const btn   = document.getElementById(<span class="cs">'bot-btn'</span>);
+  const panel = document.getElementById(<span class="cs">'bot-panel'</span>);
+  const msgs  = document.getElementById(<span class="cs">'bot-msgs'</span>);
+  const input = document.getElementById(<span class="cs">'bot-input'</span>);
+  const send  = document.getElementById(<span class="cs">'bot-send'</span>);
+
+  showCaptchaUI();
+
+  btn.addEventListener(<span class="cs">'click'</span>, () => {
+    isOpen = !isOpen;
+    panel.classList.toggle(<span class="cs">'open'</span>, isOpen);
+    btn.textContent = isOpen ? <span class="cs">'✕'</span> : <span class="cs">'🤖'</span>;
+    if (isOpen) { msgs.scrollTop = msgs.scrollHeight; showCaptchaUI(); }
+  });
+  input.addEventListener(<span class="cs">'input'</span>, () => {
+    input.style.height = <span class="cs">'auto'</span>;
+    input.style.height = Math.min(input.scrollHeight, <span class="cv">80</span>) + <span class="cs">'px'</span>;
+  });
+  input.addEventListener(<span class="cs">'keydown'</span>, e => {
+    if (e.key === <span class="cs">'Enter'</span> && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+  });
+  send.addEventListener(<span class="cs">'click'</span>, sendMsg);
+
+  async function sendMsg() {
+    if (!captchaVerified) { showCaptchaUI(); return; }
+    const text = input.value.trim();
+    if (!text || isLoading) return;
+
+    addMsg(<span class="cs">'user'</span>, text);
+    history.push({role: <span class="cs">'user'</span>, content: text});
+    input.value = <span class="cs">''</span>; input.style.height = <span class="cs">'auto'</span>;
+    const typing = addTyping();
+    isLoading = true; input.disabled = true; send.disabled = true;
+
+    try {
+      const res = await fetch(API, {
+        method: <span class="cs">'POST'</span>, headers: HEADERS,
+        body: JSON.stringify({
+          message:       text,
+          history:       history.slice(<span class="cv">0</span>, -<span class="cv">1</span>),
+          source:        SOURCE,
+          captcha_token: captchaToken || <span class="cs">''</span>
+        })
+      });
+      const data = await res.json();
+
+      <span class="cm">// If captcha failed server-side — reset and show captcha again</span>
+      if (data.captcha) {
+        typing.remove();
+        captchaVerified = false; captchaToken = null;
+        sessionStorage.removeItem(<span class="cs">'bot_captcha'</span>);
+        showCaptchaUI();
+        if (window.turnstile) window.turnstile.reset();
+        addMsg(<span class="cs">'bot'</span>, <span class="cs">'⛔ Verification failed. Please verify again.'</span>);
+        return;
+      }
+
+      typing.remove();
+      const reply = data.response || <span class="cs">'Sorry, something went wrong.'</span>;
+      if (data.ok) history.push({role: <span class="cs">'assistant'</span>, content: reply});
+      addMsg(<span class="cs">'bot'</span>, reply);
+    } catch(e) {
+      typing.remove();
+      addMsg(<span class="cs">'bot'</span>, <span class="cs">'⚠️ Could not connect. Please try again.'</span>);
+    } finally {
+      isLoading = false; input.disabled = false; send.disabled = false; input.focus();
+    }
   }
-  function addTyping(){
-    const d=document.createElement('div');
-    d.className='bot-typing';
-    d.innerHTML='<div class="bot-dot-anim"></div><div class="bot-dot-anim"></div><div class="bot-dot-anim"></div>';
-    msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
-    return d;
+
+  function addMsg(role, text) {
+    const d = document.createElement(<span class="cs">'div'</span>);
+    d.className = <span class="cs">'bmsg '</span> + role;
+    d.innerHTML = text
+      .replace(/&/g,<span class="cs">'&amp;'</span>).replace(/</g,<span class="cs">'&lt;'</span>).replace(/>/g,<span class="cs">'&gt;'</span>)
+      .replace(/\*\*(.*?)\*\*/g,<span class="cs">'&lt;strong&gt;$1&lt;/strong&gt;'</span>)
+      .replace(/\n/g,<span class="cs">'&lt;br&gt;'</span>);
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
+  }
+  function addTyping() {
+    const d = document.createElement(<span class="cs">'div'</span>);
+    d.className = <span class="cs">'btyping'</span>;
+    d.innerHTML = <span class="cs">'&lt;div class="bdot"&gt;&lt;/div&gt;'</span>.repeat(<span class="cv">3</span>);
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
   }
 })();
-<span class="key">&lt;/script&gt;</span></pre>
-    </div>
+&lt;/script&gt;</pre></div>
 
-    <div class="callout warn">
-      <span class="callout-icon">⚠️</span>
-      <div>You must change <strong>API_URL</strong> to your actual Hugging Face Space URL. The format is always: <code>https://YOUR-HF-USERNAME-YOUR-SPACE-NAME.hf.space/chat</code></div>
-    </div>
+  <div class="box warn"><span class="box-ico">⚠️</span><div>Replace <code>YOUR-HF-USERNAME-YOUR-SPACE-NAME.hf.space</code> with your actual HF Space URL, and <code>YOUR_SITE_KEY_HERE</code> with your actual Cloudflare Site Key. These two are the only changes needed per page (plus <code>SOURCE</code> if you have multiple knowledge files).</div></div>
+</div>
 
-    <div class="callout tip">
-      <span class="callout-icon">💡</span>
-      <div>The <strong>SOURCE</strong> value tells the bot which .txt file to load from GitHub. If you have multiple pages, change SOURCE on each page to load the right knowledge file. Example: <code>'faq'</code> loads <code>faq.txt</code></div>
-    </div>
+<!-- 08 -->
+<div class="sec" id="s8">
+  <div class="sec-head"><div class="snum">08</div><h2>Test Everything</h2></div>
+
+  <ul class="steps">
+    <li><span class="sn">1</span><div><strong>Backend is running</strong>Open your HF Space URL. Should see: <code>{"status": "Bot running"}</code></div></li>
+    <li><span class="sn">2</span><div><strong>Captcha appears</strong>Open your site, click the bot button. Captcha widget should show before the input box.</div></li>
+    <li><span class="sn">3</span><div><strong>Captcha passes and chat opens</strong>Complete the captcha. The input box should appear immediately.</div></li>
+    <li><span class="sn">4</span><div><strong>No re-verify on second message</strong>Type a second message. It should send immediately with no captcha prompt again.</div></li>
+    <li><span class="sn">5</span><div><strong>Knowledge loads correctly</strong>Ask something from your knowledge file. Bot should answer using your content.</div></li>
+    <li><span class="sn">6</span><div><strong>Check HF Space logs</strong>HF Space → Logs tab. Look for <code>✅ Captcha verified</code> on first message and <code>✅ User verified: cached</code> on subsequent ones.</div></li>
+    <li><span class="sn">7</span><div><strong>Refresh test</strong>Refresh the page, open chat — captcha should appear again. This is correct behavior.</div></li>
+  </ul>
+
+  <h3>Common problems</h3>
+  <div class="box danger"><span class="box-ico">🔴</span><div><strong>Captcha keeps asking every message</strong><br>This means your backend is re-verifying every message. The app.py template above already fixes this with the <code>verified_users</code> set. Make sure you're using the exact template from Step 4 without changing the captcha logic.</div></div>
+  <div class="box danger"><span class="box-ico">🔴</span><div><strong>No reply from bot at all</strong><br>Check HF Space logs for errors. Most common causes: Groq API key not saved correctly in Secrets, or the API URL in the widget doesn't match your actual HF Space URL.</div></div>
+  <div class="box danger"><span class="box-ico">🔴</span><div><strong>Knowledge not loading / wrong answers</strong><br>Your GITHUB_BASE URL is wrong or the repo is private. Make sure the repo is set to Public and the URL format is exact: <code>raw.githubusercontent.com/USERNAME/REPO/main</code></div></div>
+  <div class="box success"><span class="box-ico">✅</span><div><strong>Seeing 429 errors in logs</strong><br>Normal — one model hit its rate limit and the bot automatically tried the next. The user still got a response. That's the fallback chain working correctly.</div></div>
+</div>
+
+<!-- 09 -->
+<div class="sec" id="s9">
+  <div class="sec-head"><div class="snum">09</div><h2>Add Basic Protection</h2></div>
+  <p>The starter template already includes the essentials. Here's what's protected and what you can add as you grow.</p>
+
+  <h3>Already included in the template</h3>
+  <ul class="steps">
+    <li><span class="sn">✓</span><div><strong>Cloudflare Turnstile captcha</strong>Verified once per session, cached server-side. Blocks automated bots.</div></li>
+    <li><span class="sn">✓</span><div><strong>Message length limit</strong>Messages over 500 characters are rejected before reaching the AI — zero tokens wasted.</div></li>
+    <li><span class="sn">✓</span><div><strong>Daily limit per user</strong>150 messages/day per user. Resets at midnight. Stops one person from draining your quota.</div></li>
+    <li><span class="sn">✓</span><div><strong>Cooldown between messages</strong>3-second minimum between messages. Stops rapid-fire spam.</div></li>
+    <li><span class="sn">✓</span><div><strong>Model fallback chain</strong>If one AI model fails or rate-limits, the next one is tried automatically.</div></li>
+  </ul>
+
+  <h3>Optional protections to add as your community grows</h3>
+  <ul class="steps">
+    <li><span class="sn">+</span><div><strong>NSFW/keyword filter</strong>Before calling the AI, check the message for inappropriate keywords and reject instantly. Zero tokens wasted on bad content.</div></li>
+    <li><span class="sn">+</span><div><strong>Repetition detection</strong>Track recent messages per user. If the same message is sent 3+ times in 60 seconds, lock them briefly.</div></li>
+    <li><span class="sn">+</span><div><strong>Language filter</strong>If your bot is English-only, check if the message contains non-ASCII letters and block before it reaches the AI.</div></li>
+    <li><span class="sn">+</span><div><strong>Strike system</strong>Track violations per user. First offense = short lock. Second = longer lock. Third = 5-minute lock. Deters persistent abusers.</div></li>
+  </ul>
+
+  <div class="box tip"><span class="box-ico">💡</span><div><strong>Core principle:</strong> Block as early as possible. Every check before the AI call costs zero tokens. A message that reaches the AI costs 500-2000 tokens. Put all your defenses in front of the AI call.</div></div>
+</div>
+
+<!-- 10 -->
+<div class="sec" id="s10">
+  <div class="sec-head"><div class="snum">10</div><h2>Maintain and Grow</h2></div>
+
+  <h3>Updating knowledge files</h3>
+  <p>Go to your GitHub knowledge repo → click the .txt file → click the pencil icon → edit → commit. The bot picks up changes automatically within 10 minutes (the cache TTL). No restarts, no code changes.</p>
+
+  <h3>Adding a new page with its own knowledge</h3>
+  <ul class="steps">
+    <li><span class="sn">1</span><div>Create a new .txt file in GitHub — e.g. <code>faq.txt</code></div></li>
+    <li><span class="sn">2</span><div>On your new page change <code>const SOURCE = 'faq'</code> in the widget JavaScript</div></li>
+    <li><span class="sn">3</span><div>Done — that page's bot now loads <code>faq.txt</code> automatically</div></li>
+  </ul>
+
+  <h3>If AI models get decommissioned</h3>
+  <p>Groq occasionally retires old model names. If you see <code>decommissioned</code> or <code>model_not_found</code> in your HF Space logs, visit <code>console.groq.com/docs/models</code> to see the current list and update the <code>MODELS</code> array in <code>app.py</code>.</p>
+
+  <h3>Free tier limits to know</h3>
+  <div class="tbl">
+    <div class="trow"><div class="tlabel">Groq</div><div class="tval">14,400 requests/day per model — resets midnight UTC. Multiple models in the fallback array multiplies your effective daily capacity.</div></div>
+    <div class="trow"><div class="tlabel">Hugging Face</div><div class="tval">Free Spaces may sleep after 48h inactivity. They wake up automatically on the first request (takes ~30 seconds the first time).</div></div>
+    <div class="trow"><div class="tlabel">GitHub</div><div class="tval">Unlimited public repos and files. No rate limits that affect knowledge file loading at normal usage.</div></div>
+    <div class="trow"><div class="tlabel">Cloudflare Turnstile</div><div class="tval">Completely free forever. No request limits published for the free tier.</div></div>
   </div>
 
-  <!-- SECTION 7 -->
-  <div class="section" id="test">
-    <div class="section-header">
-      <div class="step-num">07</div>
-      <h2>Test Everything</h2>
-    </div>
+  <h3>Useful links to bookmark</h3>
+  <div class="box info"><span class="box-ico">📋</span><div>
+    <strong>Groq model list</strong> — <code>console.groq.com/docs/models</code><br>
+    <strong>HF Space logs</strong> — your Space page → Logs tab<br>
+    <strong>Cloudflare Turnstile</strong> — <code>dash.cloudflare.com</code> → Turnstile<br>
+    <strong>GitHub raw URL format</strong> — <code>raw.githubusercontent.com/USER/REPO/main/FILE.txt</code>
+  </div></div>
 
-    <p>Before sharing your bot with anyone, run through these tests to confirm everything is working.</p>
+  <div class="box tip"><span class="box-ico">🚀</span><div><strong>Want more features?</strong> From this foundation you can add: a second AI provider as backup (Cerebras is free and fast), response caching to skip AI calls for repeated questions, smarter routing that uses cheap models for simple questions and powerful models for complex ones, and more granular content filtering. Add one feature at a time and test with real logs before adding the next.</div></div>
+</div>
 
-    <ul class="steps">
-      <li>
-        <span class="s-num">1</span>
-        <div class="s-body"><strong>Test the backend is running</strong> — open your HF Space URL in browser (without /chat). You should see: <code>{"status": "Bot is running"}</code></div>
-      </li>
-      <li>
-        <span class="s-num">2</span>
-        <div class="s-body"><strong>Test the health endpoint</strong> — open your HF Space URL + /health. You should see: <code>{"ok": true}</code></div>
-      </li>
-      <li>
-        <span class="s-num">3</span>
-        <div class="s-body"><strong>Test the widget</strong> — open your website, click the bot button, type "hello" and press Enter. You should get a greeting response within a few seconds</div>
-      </li>
-      <li>
-        <span class="s-num">4</span>
-        <div class="s-body"><strong>Test knowledge loading</strong> — ask something specific from your knowledge file. If the bot answers correctly, the file is loading properly</div>
-      </li>
-      <li>
-        <span class="s-num">5</span>
-        <div class="s-body"><strong>Check Hugging Face logs</strong> — go to your Space → Logs tab. You should see messages like "✅ GROQ_API_KEY loaded" and "✅ Race winner" when messages are sent</div>
-      </li>
-    </ul>
-
-    <h3>Common problems and fixes</h3>
-
-    <div class="callout warn">
-      <span class="callout-icon">🔴</span>
-      <div><strong>Bot button shows but no reply appears</strong><br>Check your HF Space logs. Look for error messages. Most common cause: API key not saved correctly in Secrets.</div>
-    </div>
-    <div class="callout warn">
-      <span class="callout-icon">🔴</span>
-      <div><strong>500 Internal Server Error in logs</strong><br>Usually means a Python syntax error in app.py or a missing import. Check the full error message in the logs.</div>
-    </div>
-    <div class="callout warn">
-      <span class="callout-icon">🔴</span>
-      <div><strong>Knowledge file returns 404</strong><br>Your GITHUB_BASE URL is wrong. Make sure your GitHub repo is public and the URL matches exactly including username and repo name.</div>
-    </div>
-    <div class="callout success">
-      <span class="callout-icon">✅</span>
-      <div><strong>429 Too Many Requests in logs</strong><br>This is normal and fine. It means one model hit its rate limit and the bot automatically tried the next one. The user still gets a response.</div>
-    </div>
-  </div>
-
-  <!-- SECTION 8 -->
-  <div class="section" id="maintain">
-    <div class="section-header">
-      <div class="step-num">08</div>
-      <h2>Maintain and Grow</h2>
-    </div>
-
-    <p>Once your bot is live, keeping it good is simple. Here is what to do over time.</p>
-
-    <h3>Adding or updating knowledge</h3>
-    <p>Go to your GitHub knowledge repo, click the .txt file, click the pencil icon, make your changes, click Commit. The bot picks up changes automatically within 10 minutes — no restarts needed.</p>
-
-    <h3>Adding a new page with different knowledge</h3>
-    <ol class="steps">
-      <li>
-        <span class="s-num">1</span>
-        <div class="s-body"><strong>Create a new .txt file</strong> in your GitHub repo — e.g. <code>products.txt</code></div>
-      </li>
-      <li>
-        <span class="s-num">2</span>
-        <div class="s-body"><strong>Add the widget to your new page</strong> with <code>const SOURCE = 'products'</code></div>
-      </li>
-      <li>
-        <span class="s-num">3</span>
-        <div class="s-body">Done — that page's bot now loads <code>products.txt</code> automatically</div>
-      </li>
-    </ol>
-
-    <h3>If models get decommissioned</h3>
-    <p>Groq occasionally retires old models. If you see <code>model_not_found</code> in your logs, go to console.groq.com/docs/models to find the current model names and update your MODELS list in app.py.</p>
-
-    <h3>Free tier limits to know</h3>
-    <div class="summary">
-      <div class="summary-row">
-        <div class="label">Groq</div>
-        <div class="value">14,400 requests/day per model — resets at midnight UTC</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Cerebras</div>
-        <div class="value">Generous free tier — no hard daily limit published</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">Hugging Face</div>
-        <div class="value">Free Spaces sleep after 48h inactivity — wake up on first request</div>
-      </div>
-      <div class="summary-row">
-        <div class="label">GitHub</div>
-        <div class="value">Unlimited public repos and files — no limit for knowledge files</div>
-      </div>
-    </div>
-
-    <div class="callout tip">
-      <span class="callout-icon">🚀</span>
-      <div><strong>Want more advanced features?</strong> The full MIA system includes: anti-spam protection, rate limiting, NSFW filtering, strike system, response caching, parallel model racing, trust scores, and 12 protection layers. All of that is built on top of this exact same foundation. Start simple and add features as you need them.</div>
-    </div>
-  </div>
-
-  <!-- FINAL -->
-  <div class="final-box">
-    <h2>You're done! 🎉</h2>
-    <p>Your free AI chatbot is live 24/7, costs nothing, and answers questions about your specific topic using your own knowledge files. Built by following exactly what MIA did.</p>
-  </div>
+<!-- FINAL -->
+<div class="final">
+  <h2>You're done! 🎉</h2>
+  <p>Your free AI chatbot is live 24/7 with captcha protection, knowledge-based answers, and automatic model fallback — all at zero cost.</p>
+</div>
 
 </div>
 </body>
